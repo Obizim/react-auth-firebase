@@ -1,5 +1,8 @@
 import './auth.scss';
+import {useHistory} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import logo from '../../assets/doggo.png'
+import loader from '../../assets/loader.gif'
 import { useRef, useState } from 'react';
 import {useAuth} from '../../context/AuthContext'
 
@@ -9,6 +12,7 @@ const Signup = () => {
     const passwordRef = useRef()
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
+    const history = useHistory()
 
     const {signup } = useAuth()
 
@@ -22,6 +26,7 @@ const Signup = () => {
                setError(response.message)
            }
            await response.user.updateProfile({ displayName: nameRef.current.value });
+           history.replace('/')
         }catch(err) {
             setError(err.message)
         }    
@@ -46,10 +51,10 @@ const Signup = () => {
             </div>
             <div className="form--details">
                 <label htmlFor="email">Password</label>
-                <input type="password" ref={passwordRef} name="password" id="password" placeholder="password" required />
+                <input type="password" ref={passwordRef} name="password" id="password" placeholder="password (6 or more characters)" required />
             </div>
-            <button disabled={loading} className="btn btn-gradient">{loading && loading ? 'Loading' : 'Create'}</button>
-            <p>Already a member? <span className="create">Login</span></p>
+            <button disabled={loading} className="btn btn-gradient">{loading && loading ? <img src={loader} alt="Loading Circles" /> : 'Create'}</button>
+            <p>Already a member? <span className="create"><Link to="/login">Login</Link></span></p>
         </form>
         </div>
 
